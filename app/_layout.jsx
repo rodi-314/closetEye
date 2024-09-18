@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, ActivityIndicator } from 'react-native';
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo'; // Add this line
+import { ClerkProvider, SignedIn, SignedOut, ClerkLoaded } from '@clerk/clerk-expo'; 
 import LoginScreen from './../components/LoginScreen'
 
 export default function RootLayout() {
@@ -20,14 +20,16 @@ export default function RootLayout() {
   
   return (
     <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-      <SignedIn>
-        <Stack screenOptions={{headerShown:false}}>
-          <Stack.Screen name="(tabs)" />
-        </Stack>   
-      </SignedIn>
-      <SignedOut>
-        <LoginScreen/>
-      </SignedOut>
+      <ClerkLoaded>
+        <SignedIn>
+          <Stack screenOptions={{headerShown:false}}>
+            <Stack.Screen name="(tabs)" />
+          </Stack>   
+        </SignedIn>
+        <SignedOut>
+          <LoginScreen/>
+        </SignedOut>
+      </ClerkLoaded>
     </ClerkProvider> 
   );
 }
