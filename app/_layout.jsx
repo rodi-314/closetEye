@@ -51,7 +51,7 @@ export default function RootLayout() {
           <Stack screenOptions={{headerShown:false}}>
             {/* change below code to this if done with editing page
              -> <Stack.Screen name="(tabs)/home" /> */}
-           <Stack.Screen name="(tabs)/inventory"/>
+           <Stack.Screen name="(tabs)"/>
           </Stack>   
         </SignedIn>
         <SignedOut>
