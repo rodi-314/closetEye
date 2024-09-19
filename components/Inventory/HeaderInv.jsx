@@ -3,7 +3,7 @@ import React from 'react';
 import { useUser } from '@clerk/clerk-expo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function Header() {
+export default function HeaderInv() {
   const { user } = useUser();
 
   return (
@@ -18,9 +18,23 @@ export default function Header() {
       <View style={styles.searchBar}>
         <Ionicons name="search" size={24} color="black" style={styles.searchIcon} />
         <TextInput
-          placeholder='Find your friends'
+          placeholder='Find your clothes'
           style={styles.searchInput}
         />
+      </View>
+      <View style={styles.clothingRecord}>
+        <View style={styles.clothingComponent}>
+          <Text style={styles.clothingComponentNum}>-</Text>
+          <Text style={styles.clothingComponentWords}>Modules</Text>
+        </View>
+        <View style={styles.clothingComponent}>
+          <Text style={styles.clothingComponentNum}>-</Text>
+          <Text style={styles.clothingComponentWords}>Clothings</Text>
+        </View>
+        <View style={styles.clothingComponent}>
+          <Text style={styles.clothingComponentNum}>-</Text>
+          <Text style={styles.clothingComponentWords}>Outfits</Text>
+        </View>
       </View>
     </View>
   );
@@ -32,7 +46,8 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     backgroundColor: '#6d5cc4',
     borderBottomRightRadius: 15,
-    borderBottomLeftRadius: 15
+    borderBottomLeftRadius: 15,
+    paddingBottom:10
   },
   userArea: {
     flexDirection: 'row',
@@ -67,5 +82,24 @@ const styles = StyleSheet.create({
     fontFamily: 'outfit',
     fontSize: 15,
     flex: 1
+  },
+  clothingRecord: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 30
+  },
+  clothingComponent: {
+    alignItems: 'center'
+  },
+  clothingComponentWords: {
+    fontFamily: 'outfit',
+    fontSize: 15,
+    color: 'white'
+  },
+  clothingComponentNum: {
+    fontFamily: 'outfit',
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center'
   }
 });
