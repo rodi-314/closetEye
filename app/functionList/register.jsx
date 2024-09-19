@@ -18,6 +18,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [key, setKey] = useState('');
   const [description, setDescription] = useState('');
+  const descriptionLimit = 200; // Set character limit for description
 
   useEffect(() => {
     navigation.setOptions({
@@ -76,7 +77,15 @@ export default function Register() {
         <Text style={styles.iconText}>Pick an Icon!</Text>
         <TextInput placeholder='Name' style={styles.textInput} onChangeText={setName}/>
         <TextInput placeholder='Activation Key' style={styles.textInput} onChangeText={setKey}/>
-        <TextInput placeholder='Description' style={[styles.textInput, styles.descriptionInput]} multiline={true} numberOfLines={3} onChangeText={setDescription}/>
+        <TextInput
+          placeholder='Description'
+          style={[styles.textInput, styles.descriptionInput]} 
+          multiline={true}
+          numberOfLines={3}
+          onChangeText={setDescription}
+          maxLength={descriptionLimit}
+        />
+        <Text style={styles.counterText}>{description.length}/{descriptionLimit}</Text>
         <TouchableOpacity style={styles.addContainer} onPress={handleAdd}>
           <Text style={styles.addText}>Add New Module</Text>
         </TouchableOpacity>
@@ -127,6 +136,11 @@ const styles = StyleSheet.create({
   },
   descriptionInput: {
     height: 100
+  },
+  counterText: {
+    alignSelf: 'flex-end',
+    fontFamily: 'outfit',
+    marginVertical: 5
   },
   addContainer: {
     padding: 15,
