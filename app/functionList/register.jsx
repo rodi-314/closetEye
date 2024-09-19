@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
 import { useNavigation } from 'expo-router';
 import IconPicker from './iconPicker';
 import { db } from '../../configs/FirebaseConfig';
@@ -48,6 +48,11 @@ export default function Register() {
   };
 
   const handleAdd = async () => {
+    if (name == 'icons.png' || !iconPath || !key || !description) {
+      Alert.alert('Error', 'Please fill all the fields and select an icon!');
+      return;
+    }
+    
     try {
       const newDocId = getDocId();
       await setDoc(doc(db,'Modules',newDocId), {
@@ -65,26 +70,31 @@ export default function Register() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add New Modules</Text>
-      <Text style={styles.subtitle}>Fill all the details below to add a new module</Text>
-      <TouchableOpacity onPress={onIconPick}>
-        <Image source={currentIcon} style={styles.icon} />
-      </TouchableOpacity>
-      <IconPicker visible={modalVisible} onIconSelected={handleIconSelection} onClose={() => setModalVisible(false)} />
-      <Text style={styles.iconText}>Pick an Icon!</Text>
-      <View>
-        <TextInput placeholder='Name' style={styles.textInput} onChangeText={(v)=> setName(v)}/>
-        <TextInput placeholder='Activation Key' style={styles.textInput} onChangeText={(v)=> setKey(v)}/>
-        <TextInput
-          placeholder='Description'
-          style={[styles.textInput, styles.descriptionInput]} 
-          multiline={true}
-          numberOfLines={3}
-          onChangeText={(v)=> setDescription(v)}
-        />
-      </View>
-      <TouchableOpacity style={styles.addContainer} onPress={handleAdd}>
-        <Text style={styles.addText}>Add New Module</Text>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <Text style={styles.title}>Add New Modules</Text>
+        <Text style={styles.subtitle}>Fill all the details below to add a new module</Text>
+        <TouchableOpacity onPress={onIconPick}>
+          <Image source={currentIcon} style={styles.icon} />
+        </TouchableOpacity>
+        <IconPicker visible={modalVisible} onIconSelected={handleIconSelection} onClose={() => setModalVisible(false)} />
+        <Text style={styles.iconText}>Pick an Icon!</Text>
+        <View>
+          <TextInput placeholder='Name' style={styles.textInput} onChangeText={(v)=> setName(v)}/>
+          <TextInput placeholder='Activation Key' style={styles.textInput} onChangeText={(v)=> setKey(v)}/>
+          <TextInput
+            placeholder='Description'
+            style={[styles.textInput, styles.descriptionInput]} 
+            multiline={true}
+            numberOfLines={3}
+            onChangeText={(v)=> setDescription(v)}
+          />
+        </View>
+        <TouchableOpacity style={styles.addContainer} onPress={handleAdd}>
+          <Text style={styles.addText}>Add New Module</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <TouchableOpacity style={styles.inventoryButton}>
+        <Text style={styles.inventoryButtonText} onPress={() => navigation.navigate('inventory')}>Go to Inventory</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,7 +102,8 @@ export default function Register() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    padding: 20,
+    flex: 1, // Use flex to manage the layout
   },
   title: {
     fontFamily: 'outfit-bold',
@@ -136,5 +147,18 @@ const styles = StyleSheet.create({
     textAlign:'center',
     fontFamily:'outfit-medium',
     color:'white'
+  },
+  inventoryButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#6d5cc4',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom:10
+  },
+  inventoryButtonText: {
+    color: 'white',
+    fontFamily: 'outfit-medium'
   }
 });
