@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { useNavigation } from 'expo-router';
 import IconPicker from './iconPicker';
+import { db } from '../../configs/FirebaseConfig';
+import { doc, setDoc } from "firebase/firestore";
+
+
+const getDocId = (length = 20) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({ length }, () =>
+    characters.charAt(Math.floor(Math.random() * characters.length))
+  ).join('');
+};
+
 
 export default function Register() {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentIcon, setCurrentIcon] = useState(require('../../assets/images/icons.png'));
   const [iconPath,setIconPath] = useState('icons.png');
-  const [name,setName] = useState();
-  const [key,setKey] = useState();
-  const [description,setDescription] = useState();
+  const [name,setName] = useState('');
+  const [key,setKey] = useState('');
+  const [description,setDescription] = useState('');
 
   useEffect(() => {
     navigation.setOptions({
@@ -36,8 +47,20 @@ export default function Register() {
     setModalVisible(false);
   };
 
-  const handleAdd = () => {
-    console.log("Icon Path is:", iconPath)
+  const handleAdd = async () => {
+    try {
+      const newDocId = getDocId();
+      await setDoc(doc(db,'Modules',newDocId), {
+        name: name,
+        icon: iconPath,
+        key: key,
+        description: description
+      });
+      Alert.alert('Success', 'Module added successfully!');
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      Alert.alert('Error', 'Error adding module!');
+    }
   }
 
   return (
