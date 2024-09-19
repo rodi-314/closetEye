@@ -18,8 +18,6 @@ export default function ModuleList() {
             });
             setModuleList(modules);
         });
-
-        // Cleanup function to unsubscribe from the listener when the component unmounts
         return () => unsubscribe();
     }, []);
 
@@ -32,7 +30,7 @@ export default function ModuleList() {
                 paddingTop: 20,
                 marginBottom: 5
             }}>Modules You Own</Text>
-            <FlatList
+            <FlatList 
                 data={moduleList}
                 renderItem={({ item }) => (
                     <ModuleListCard module={item} key={item.id} />
