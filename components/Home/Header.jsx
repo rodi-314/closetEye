@@ -1,62 +1,71 @@
-import { View, Text, Image } from 'react-native'
-import React from 'react'
-import { useUser } from '@clerk/clerk-expo'
+import { View, Text, Image, TextInput, StyleSheet } from 'react-native';
+import React from 'react';
+import { useUser } from '@clerk/clerk-expo';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { TextInput } from 'react-native';
 
 export default function Header() {
-    const {user} = useUser();
-  
-    return (
-    <View style={{
-        padding:20,
-        paddingTop:40,
-        backgroundColor: '#6d5cc4',
-        borderBottomRightRadius:15,
-        borderBottomLeftRadius:15 
-    }}>
-      <View style={{
-        display:'flex',
-        flexDirection:'row',
-        alignItems:'center',
-        gap:10
-      }}>
-        <Image source={{uri:user?.imageUrl}}
-            style={{
-                width:45,
-                height:45,
-                borderRadius:99
-            }}
-        />
+  const { user } = useUser();
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.userArea}>
+        <Image source={{ uri: user?.imageUrl }} style={styles.userImage} />
         <View>
-            <Text style={{
-                color:'white'
-            }}>Welcome,</Text>
-            <Text style={{
-                fontSize:20,
-                color:'white',
-                fontFamily:'outfit-medium'
-            }}>{user?.fullName}</Text>
+          <Text style={styles.welcomeText}>Welcome,</Text>
+          <Text style={styles.userName}>{user?.fullName}</Text>
         </View>
       </View>
-      <View style={{
-        display:'flex',
-        flexDirection:'row',
-        gap:10,
-        alignItems:'center',
-        backgroundColor: 'white',
-        padding: 10,
-        marginTop:15,
-        marginVertical:5,
-        borderRadius:8
-      }}>
-        <Ionicons name="search" size={24} color="black" />
-        <TextInput placeholder='Find your friends'
-        style={{
-            fontFamily:'outfit',
-            fontSize:15
-        }}/>
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={24} color="black" style={styles.searchIcon} />
+        <TextInput
+          placeholder='Find your friends'
+          style={styles.searchInput}
+        />
       </View>
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    paddingTop: 40,
+    backgroundColor: '#6d5cc4',
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15
+  },
+  userArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  userImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 99,
+    marginRight: 10
+  },
+  welcomeText: {
+    color: 'white'
+  },
+  userName: {
+    fontSize: 20,
+    color: 'white',
+    fontFamily: 'outfit-medium'
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 8
+  },
+  searchIcon: {
+    marginRight: 10
+  },
+  searchInput: {
+    fontFamily: 'outfit',
+    fontSize: 15,
+    flex: 1
+  }
+});
