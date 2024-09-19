@@ -49,7 +49,7 @@ export default function RootLayout() {
       <ClerkLoaded>
         <SignedIn>
           <Stack screenOptions={{headerShown:false}}>
-            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(tabs)/home" />
           </Stack>   
         </SignedIn>
         <SignedOut>

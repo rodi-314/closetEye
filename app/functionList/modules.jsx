@@ -8,7 +8,7 @@ export default function register() {
   useEffect(()=>{
     navigation.setOptions({
       headerShown:true,
-      headerTitle: "Create Outfits",
+      headerTitle: "Modules",
       headerStyle: {
         backgroundColor: '#6d5cc4',
       },

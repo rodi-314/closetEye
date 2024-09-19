@@ -7,7 +7,7 @@ export default function stats() {
   useEffect(()=>{
     navigation.setOptions({
       headerShown:true,
-      headerTitle: "Create Outfits",
+      headerTitle: "Statistics",
       headerStyle: {
         backgroundColor: '#6d5cc4',
       },

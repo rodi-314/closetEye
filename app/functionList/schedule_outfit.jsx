@@ -7,7 +7,7 @@ export default function schedule_outfit() {
   useEffect(()=>{
     navigation.setOptions({
       headerShown:true,
-      headerTitle: "Create Outfits",
+      headerTitle: "Outfit Schedule",
       headerStyle: {
         backgroundColor: '#6d5cc4',
       },
