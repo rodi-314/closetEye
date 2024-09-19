@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { collection, getDocs, query } from 'firebase/firestore'
 import {db} from '../../configs/FirebaseConfig'
 import FuncItems from './FuncItems';
+import { useRouter } from 'expo-router';
 
 export default function funcIcons() {
     const [functionList, setFunctionList] = useState([]);
+    const router=useRouter();
     useEffect(() => {
         getFunctionList()
     }, [])
@@ -28,7 +30,7 @@ export default function funcIcons() {
         data = {functionList}
         horizontal = {true}
         renderItem={({item,index}) =>(
-            <FuncItems func={item} key={index} onFuncPress={(func)=>console.log(func)}/>
+            <FuncItems func={item} key={index} onFuncPress={(func)=>router.push('/functionList/' + item.name)}/>
         )}
       />
     </View>
