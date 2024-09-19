@@ -17,7 +17,6 @@ export default function ClothingAI() {
     const q=query(collection(db, 'clothing_suggestions'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
       setSuggestionList(prev => [...prev,doc.data()]);
     });
   }

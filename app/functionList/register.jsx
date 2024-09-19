@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
 import { useNavigation } from 'expo-router';
-import IconPicker from './iconPicker';
+import IconPicker from './IconPicker';
 import { db } from '../../configs/FirebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 
-
-const getDocId = (length = 20) => {
+const getDocId = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from({ length }, () =>
-    characters.charAt(Math.floor(Math.random() * characters.length))
-  ).join('');
+  return Array.from({ length: 20 }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
 };
-
 
 export default function Register() {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [currentIcon, setCurrentIcon] = useState(require('../../assets/images/icons.png'));
-  const [iconPath,setIconPath] = useState('icons.png');
-  const [name,setName] = useState('');
-  const [key,setKey] = useState('');
-  const [description,setDescription] = useState('');
+  const [iconPath, setIconPath] = useState('icons.png');
+  const [name, setName] = useState('');
+  const [key, setKey] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     navigation.setOptions({
@@ -41,32 +37,32 @@ export default function Register() {
     setModalVisible(true);
   };
 
-  const handleIconSelection = (iconUri, id) => {
+  const handleIconSelection = (iconUri, iconId) => {
     setCurrentIcon(iconUri);
-    setIconPath(id)
+    setIconPath(iconId);
     setModalVisible(false);
   };
 
   const handleAdd = async () => {
-    if (name == 'icons.png' || !iconPath || !key || !description) {
-      Alert.alert('Error', 'Please fill all the fields and select an icon!');
+    if (!name || !iconPath || !key || !description || iconPath === 'icons.png') {
+      Alert.alert('Error', 'Please fill all fields and select an icon!');
       return;
     }
-    
+
     try {
       const newDocId = getDocId();
-      await setDoc(doc(db,'Modules',newDocId), {
-        name: name,
+      await setDoc(doc(db, 'Modules', newDocId), {
+        name,
         icon: iconPath,
-        key: key,
-        description: description
+        key,
+        description
       });
       Alert.alert('Success', 'Module added successfully!');
     } catch (error) {
       console.error("Error adding document: ", error);
       Alert.alert('Error', 'Error adding module!');
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -78,23 +74,15 @@ export default function Register() {
         </TouchableOpacity>
         <IconPicker visible={modalVisible} onIconSelected={handleIconSelection} onClose={() => setModalVisible(false)} />
         <Text style={styles.iconText}>Pick an Icon!</Text>
-        <View>
-          <TextInput placeholder='Name' style={styles.textInput} onChangeText={(v)=> setName(v)}/>
-          <TextInput placeholder='Activation Key' style={styles.textInput} onChangeText={(v)=> setKey(v)}/>
-          <TextInput
-            placeholder='Description'
-            style={[styles.textInput, styles.descriptionInput]} 
-            multiline={true}
-            numberOfLines={3}
-            onChangeText={(v)=> setDescription(v)}
-          />
-        </View>
+        <TextInput placeholder='Name' style={styles.textInput} onChangeText={setName}/>
+        <TextInput placeholder='Activation Key' style={styles.textInput} onChangeText={setKey}/>
+        <TextInput placeholder='Description' style={[styles.textInput, styles.descriptionInput]} multiline={true} numberOfLines={3} onChangeText={setDescription}/>
         <TouchableOpacity style={styles.addContainer} onPress={handleAdd}>
           <Text style={styles.addText}>Add New Module</Text>
         </TouchableOpacity>
       </ScrollView>
-      <TouchableOpacity style={styles.inventoryButton}>
-        <Text style={styles.inventoryButtonText} onPress={() => navigation.navigate('inventory')}>Go to Inventory</Text>
+      <TouchableOpacity style={styles.inventoryButton} onPress={() => navigation.navigate('inventory')}>
+        <Text style={styles.inventoryButtonText}>Go to Inventory</Text>
       </TouchableOpacity>
     </View>
   );
@@ -102,12 +90,15 @@ export default function Register() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    flex: 1, // Use flex to manage the layout
+    flex: 1,
+    padding: 20
+  },
+  scrollViewContainer: {
+    flexGrow: 1
   },
   title: {
     fontFamily: 'outfit-bold',
-    fontSize: 25,
+    fontSize: 25
   },
   subtitle: {
     fontFamily: 'outfit',
@@ -117,36 +108,36 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginTop: 20,
-    borderRadius:10,
-    borderColor:'grey',
-    borderWidth:2,
+    borderRadius: 10,
+    borderColor: 'grey',
+    borderWidth: 2
   },
-  iconText:{
-    fontFamily:'outfit-medium',
-    marginLeft:13
+  iconText: {
+    fontFamily: 'outfit-medium',
+    marginLeft: 13
   },
-  textInput:{
-    padding:15,
-    borderWidth:1,
-    borderRadius:10,
-    fontSize:15,
-    backgroundColor:'white',
-    marginTop:10,
-    fontFamily:'outfit'
+  textInput: {
+    padding: 15,
+    borderWidth: 1,
+    borderRadius: 10,
+    fontSize: 15,
+    backgroundColor: 'white',
+    marginTop: 10,
+    fontFamily: 'outfit'
   },
   descriptionInput: {
-    height: 100 
+    height: 100
   },
-  addContainer:{
-    padding:15,
-    backgroundColor:'#6d5cc4',
-    borderRadius:10,
-    marginTop:20
+  addContainer: {
+    padding: 15,
+    backgroundColor: '#6d5cc4',
+    borderRadius: 10,
+    marginTop: 20
   },
-  addText:{
-    textAlign:'center',
-    fontFamily:'outfit-medium',
-    color:'white'
+  addText: {
+    textAlign: 'center',
+    fontFamily: 'outfit-medium',
+    color: 'white'
   },
   inventoryButton: {
     position: 'absolute',
@@ -154,8 +145,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     backgroundColor: '#6d5cc4',
     padding: 15,
-    borderRadius: 10,
-    marginBottom:10
+    borderRadius: 10
   },
   inventoryButtonText: {
     color: 'white',

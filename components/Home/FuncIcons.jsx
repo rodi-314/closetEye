@@ -18,7 +18,6 @@ export default function CreateOutfit() {
         const q = query(collection(db, 'Functions'));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-            console.log(doc.data());
             setFunctionList(prev => [...prev, doc.data()]);
         });
     };
