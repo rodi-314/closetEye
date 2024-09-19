@@ -16,8 +16,7 @@ export default function FuncItems({func,onFuncPress}) {
             <Image source={{uri:func.icon}}
             style={{
                 width:50,
-                height:50,
-                alignSelf:'center'
+                height:50
             }}
             />
       </View>
