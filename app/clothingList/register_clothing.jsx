@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
-import { useNavigation, useRouter } from 'expo-router';
-import { db, storage } from '../../configs/FirebaseConfig';
+import { useNavigation } from 'expo-router';
+import { dbReal, db, storage } from '../../configs/FirebaseConfig';
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
+import { ref as dbRef, set, onValue, off } from 'firebase/database';
 
 const getDocId = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -14,13 +15,13 @@ const getDocId = () => {
 
 export default function register_clothing() {
   const navigation = useNavigation();
-  const router = useRouter();
-  const [moduleList,setModuleList] = useState([]);
+  const [moduleList, setModuleList] = useState([]);
   const [pic, setPic] = useState(null);
   const [name, setName] = useState('');
   const [moduleLink, setModuleLink] = useState('');
   const [description, setDescription] = useState('');
-  const descriptionLimit = 120; // Set character limit for description
+  const [rfid, setRfid] = useState('');
+  const descriptionLimit = 120;
 
   useEffect(() => {
     navigation.setOptions({
@@ -71,7 +72,8 @@ export default function register_clothing() {
         name,
         pic,
         moduleLink,
-        description
+        description,
+        rfid
       });
       Alert.alert('Success', 'Module added successfully!');
     } catch (error) {
@@ -91,6 +93,29 @@ export default function register_clothing() {
       }])
     })
   }
+
+  const getRfid = async () => {
+    const registrationRef = dbRef(dbReal, 'registration');
+    set(registrationRef, {
+      mode: true,
+      complete: false
+    });
+  
+    const completeRef = dbRef(dbReal, 'registration/complete');
+    onValue(completeRef, (snapshot) => {
+      const isComplete = snapshot.val();
+      if (isComplete) {
+        off(completeRef);
+        const tagUidRef = dbRef(dbReal, 'registration/tag_uid');
+        onValue(tagUidRef, (snapshot) => {
+          const tagUid = snapshot.val();
+          setRfid(tagUid.toString());  // This sets the RFID tag into the state
+          console.log('Tag UID:', tagUid);  // Previously used for logging
+          off(tagUidRef);
+        }, { onlyOnce: true });
+      }
+    });
+  };  
 
   return (
     <View style={styles.container}>
@@ -135,6 +160,18 @@ export default function register_clothing() {
           onChangeText={setDescription}
           maxLength={descriptionLimit}
         />
+        <View>
+        <TextInput
+        placeholder='Rfid Tag'
+        style={styles.textInput}
+        value={rfid}  // This ensures the TextInput displays the current state
+        onChangeText={setRfid}  // This updates the state when the user types in the field
+      />
+
+          <TouchableOpacity style={styles.scanButton} onPress={()=>getRfid()}>
+            <Text style={styles.scanButtonText}>Scan</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.counterText}>{description.length}/{descriptionLimit}</Text>
         <TouchableOpacity style={styles.addContainer} onPress={onAddClothing}>
           <Text style={styles.addText}>Add Clothing</Text>
@@ -212,6 +249,18 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   inventoryButtonText: {
+    color: 'white',
+    fontFamily: 'outfit-medium'
+  },
+  scanButton: {
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
+    backgroundColor: '#6d5cc4',
+    padding: 15,
+    borderRadius: 10
+  },
+  scanButtonText: {
     color: 'white',
     fontFamily: 'outfit-medium'
   }
