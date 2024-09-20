@@ -4,9 +4,11 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import ClothingListCard from "./ClothingListCard";
 import { TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function ClothingList() {
   const [clothingList, setClothingList] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const q = query(collection(db, "Clothings"));
@@ -43,7 +45,7 @@ export default function ClothingList() {
         >
           Clothes You Own
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/clothingList/register_clothing')}>
           <Image
             source={require("./../../assets/images/addIcon.png")}
             style={{
