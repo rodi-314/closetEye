@@ -16,7 +16,7 @@ export default function ClothingList() {
       const clothings = [];
       querySnapshot.forEach((doc) => {
         const clothingData = doc.data();
-        clothingData.od = doc.id;
+        clothingData.id = doc.id;
         clothings.push(clothingData);
       });
       setClothingList(clothings);

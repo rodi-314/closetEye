@@ -43,11 +43,10 @@ export default function ClothingByModule({}) {
   const getClothingList = async () => {
     const q = query(collection(db, 'Clothings'), where('moduleLink', '==', clothings));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.data())
-      setClothingList(prev=>[...prev,doc.data()])
-    });
+    const clothes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setClothingList(clothes); 
   };
+  
 
   return (
     <View>
