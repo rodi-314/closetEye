@@ -1,11 +1,12 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
-import { useUser } from '@clerk/clerk-expo'
+import { useAuth, useUser } from '@clerk/clerk-expo'
 import { TouchableOpacity } from 'react-native';
 
 export default function UserIntro() {
   
     const {user}=useUser();
+    const {signOut}=useAuth();
 
     return (
     <View style={{
@@ -27,7 +28,7 @@ export default function UserIntro() {
         fontFamily:'outfit',
         fontSize:15
       }}>{user?.primaryEmailAddress?.emailAddress}</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>signOut()}>
         <View style={{
             display:'flex',
             flexDirection:'row',
