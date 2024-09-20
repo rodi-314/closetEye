@@ -4,6 +4,7 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import ModuleListCard from "./ModuleListCard";
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from 'expo-router';
 
 export default function ModuleList() {
   const [moduleList, setModuleList] = useState([]);
@@ -52,6 +53,7 @@ export default function ModuleList() {
               marginTop: 20,
               marginRight: 15,
             }}
+            onPress={() => navigation.navigate('register')}
           />
         </TouchableOpacity>
       </View>

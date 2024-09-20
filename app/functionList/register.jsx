@@ -18,7 +18,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [key, setKey] = useState('');
   const [description, setDescription] = useState('');
-  const descriptionLimit = 200; // Set character limit for description
+  const descriptionLimit = 120; // Set character limit for description
 
   useEffect(() => {
     navigation.setOptions({
