@@ -1,11 +1,11 @@
-import { View, Text, Image, TextInput, StyleSheet } from 'react-native';
 import React from 'react';
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function HeaderInv() {
+export default function HeaderInv({ activeSection, setActiveSection }) {
   const { user } = useUser();
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.userArea}>
@@ -17,24 +17,18 @@ export default function HeaderInv() {
       </View>
       <View style={styles.searchBar}>
         <Ionicons name="search" size={24} color="black" style={styles.searchIcon} />
-        <TextInput
-          placeholder='Find your clothes'
-          style={styles.searchInput}
-        />
+        <TextInput placeholder='Find your clothes' style={styles.searchInput} />
       </View>
-      <View style={styles.clothingRecord}>
-        <View style={styles.clothingComponent}>
-          <Text style={styles.clothingComponentNum}>-</Text>
-          <Text style={styles.clothingComponentWords}>Modules</Text>
-        </View>
-        <View style={styles.clothingComponent}>
-          <Text style={styles.clothingComponentNum}>-</Text>
-          <Text style={styles.clothingComponentWords}>Clothings</Text>
-        </View>
-        <View style={styles.clothingComponent}>
-          <Text style={styles.clothingComponentNum}>-</Text>
-          <Text style={styles.clothingComponentWords}>Outfits</Text>
-        </View>
+      <View style={styles.selectorContainer}>
+        <TouchableOpacity style={styles.selectorButton(activeSection === 'modules')} onPress={() => setActiveSection('modules')}>
+          <Text style={styles.selectorText}>Modules</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.selectorButton(activeSection === 'clothings')} onPress={() => setActiveSection('clothings')}>
+          <Text style={styles.selectorText}>Clothings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.selectorButton(activeSection === 'outfits')} onPress={() => setActiveSection('outfits')}>
+          <Text style={styles.selectorText}>Outfits</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -101,5 +95,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
     textAlign: 'center'
+  },
+  selectorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  selectorButton: isActive => ({
+    padding: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: isActive ? 'white' : 'transparent',
+  }),
+  selectorText: {
+    color: 'white',
+    fontFamily: 'outfit',
   }
 });
