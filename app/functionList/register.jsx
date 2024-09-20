@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRouter } from 'expo-router';
-import IconPicker from './IconPicker';
+import IconPicker from './iconPicker';
 import { db } from '../../configs/FirebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 

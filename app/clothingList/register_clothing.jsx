@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRouter } from 'expo-router';
-import IconPicker from '../functionList/IconPicker';
 import { db, storage } from '../../configs/FirebaseConfig';
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
