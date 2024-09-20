@@ -16,7 +16,11 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.c2linaung.closeteye"
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +37,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7478b9b2-3e08-46cc-8931-f831e64acdbc"
+      }
     }
   }
 }
