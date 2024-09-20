@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import IconPicker from './IconPicker';
 import { db } from '../../configs/FirebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
@@ -19,6 +19,7 @@ export default function Register() {
   const [key, setKey] = useState('');
   const [description, setDescription] = useState('');
   const descriptionLimit = 120; // Set character limit for description
+  const router = useRouter();
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,8 +69,26 @@ export default function Register() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <Text style={styles.title}>Add New Modules</Text>
-        <Text style={styles.subtitle}>Fill all the details below to add a new module</Text>
+        <View style={{display:'flex', flexDirection:'row',justifyContent: "space-between"}}>
+          <View>
+            <Text style={styles.title}>Add New Modules</Text>
+            <Text style={styles.subtitle}>Fill all the details below to add a new module</Text>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/clothingList/register_clothing')}>
+            <Image
+              source={require("./../../assets/images/ClothingIcons/shirt4.png")}
+              style={{
+                height: 50,
+                width: 50,
+                marginTop: 2,
+                marginRight: 3,
+                borderRadius: 10,
+                borderColor: 'grey',
+                borderWidth: 1,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={onIconPick}>
           <Image source={currentIcon} style={styles.icon} />
         </TouchableOpacity>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import IconPicker from '../functionList/IconPicker';
 import { db, storage } from '../../configs/FirebaseConfig';
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
@@ -15,6 +15,7 @@ const getDocId = () => {
 
 export default function register_clothing() {
   const navigation = useNavigation();
+  const router = useRouter();
   const [moduleList,setModuleList] = useState([]);
   const [pic, setPic] = useState(null);
   const [name, setName] = useState('');
@@ -95,8 +96,26 @@ export default function register_clothing() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <Text style={styles.title}>Add New Clothes</Text>
-        <Text style={styles.subtitle}>Fill all the details below to add a new clothing</Text>
+        <View style={{display:'flex', flexDirection:'row',justifyContent: "space-between"}}>
+          <View>
+            <Text style={styles.title}>Add New Clothes</Text>
+            <Text style={styles.subtitle}>Fill all the details below to add a new clothing</Text>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/functionList/register')}>
+              <Image
+                source={require("./../../assets/images/module.png")}
+                style={{
+                  height: 50,
+                  width: 50,
+                  marginTop: 2,
+                  marginRight: 3,
+                  borderRadius: 10,
+                  borderColor: 'grey',
+                  borderWidth: 1,
+                }}
+              />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={()=> onImagePick()}>
           {!pic ? <Image source={require('../../assets/images/camera.png')} style={styles.icon} /> :
             <Image source={{uri:pic}} style={styles.icon} />}
