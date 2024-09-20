@@ -4,11 +4,10 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import ModuleListCard from "./ModuleListCard";
 import { TouchableOpacity } from "react-native";
-import { useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 
 export default function ModuleList() {
   const [moduleList, setModuleList] = useState([]);
-
   useEffect(() => {
     const q = query(collection(db, "Modules"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -44,7 +43,7 @@ export default function ModuleList() {
         >
           Modules You Own
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/functionList/register')}>
           <Image
             source={require("./../../assets/images/addIcon.png")}
             style={{
@@ -53,7 +52,6 @@ export default function ModuleList() {
               marginTop: 20,
               marginRight: 15,
             }}
-            onPress={() => navigation.navigate('register')}
           />
         </TouchableOpacity>
       </View>
