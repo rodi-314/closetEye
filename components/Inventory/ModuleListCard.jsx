@@ -1,19 +1,22 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 import icons from '../../app/functionList/icons'; 
+import { TouchableOpacity } from 'react-native';
 
 export default function ModuleListCard({ module }) {
   return (
-    <View style={styles.container}>
-      <Image
-        source={icons[module.icon]}
-        style={styles.image}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.moduleCompTextTitle}>{module.name}</Text>
-        <Text style={styles.moduleCompText}>{module.description}</Text>
+    <TouchableOpacity>
+      <View style={styles.container}>
+        <Image
+          source={icons[module.icon]}
+          style={styles.image}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.moduleCompTextTitle}>{module.name}</Text>
+          <Text style={styles.moduleCompText}>{module.description}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
