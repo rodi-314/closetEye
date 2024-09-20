@@ -1,15 +1,16 @@
-import { View, Text, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
+import { View, Text, FlatList } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../configs/FirebaseConfig";
+import { db, dbReal } from "../../configs/FirebaseConfig";
+import { ref, get as getFirebase } from "firebase/database"; // Correct import for using get from Firebase Realtime Database
 import ClothingsByModuleCard from "../../components/Inventory/ClothingsByModuleCard";
 
 export default function ClothingByModule({}) {
   const navigation = useNavigation();
   const { clothings } = useLocalSearchParams();
   const [moduleName, setModuleName] = useState('');
-  const [clothingList,setClothingList] = useState([]);
+  const [clothingList, setClothingList] = useState([]);
 
   useEffect(() => {
     const fetchModule = async () => {
@@ -44,31 +45,37 @@ export default function ClothingByModule({}) {
     const q = query(collection(db, 'Clothings'), where('moduleLink', '==', clothings));
     const querySnapshot = await getDocs(q);
     const clothes = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setClothingList(clothes); 
+
+    // Filter based on RFID 'in' status
+    const filteredClothes = await Promise.all(clothes.map(async (clothing) => {
+      const rfidRef = ref(dbReal, `inventory/${clothing.rfid}/in`);
+      const rfidSnapshot = await getFirebase(rfidRef);
+      if (rfidSnapshot.exists() && rfidSnapshot.val()) {
+        return clothing;  // Include this clothing if 'in' is true
+      }
+      return null;
+    }));
+
+    setClothingList(filteredClothes.filter(Boolean));  // Update state with filtered list
   };
-  
 
   return (
     <View>
-      <Text
-        style={{
+      <Text style={{
           fontFamily: "outfit-bold",
           fontSize: 20,
           paddingLeft: 10,
           paddingTop: 15,
           marginBottom: 5,
-        }}
-      >
+        }}>
         Clothes in This Module
       </Text>
       <FlatList
-        data ={clothingList}
-        renderItem={({item,index})=>(
-          <ClothingsByModuleCard
-            clothing={item}
-            key={index}
-          />
+        data={clothingList}
+        renderItem={({ item }) => (
+          <ClothingsByModuleCard clothing={item} key={item.id} />
         )}
+        keyExtractor={item => item.id}
       />
     </View>
   );

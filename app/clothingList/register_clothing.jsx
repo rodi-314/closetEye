@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { dbReal, db, storage } from '../../configs/FirebaseConfig';
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import * as ImagePicker from 'expo-image-picker';
@@ -14,6 +14,7 @@ const getDocId = () => {
 };
 
 export default function register_clothing() {
+  const router = useRouter();
   const navigation = useNavigation();
   const [moduleList, setModuleList] = useState([]);
   const [pic, setPic] = useState(null);
@@ -88,7 +89,7 @@ export default function register_clothing() {
     const snapShot = await getDocs(q);
     snapShot.forEach((doc)=>{
       setModuleList(prev=>[...prev,{
-        label:(doc.data()).key,
+        label:(doc.data()).name,
         value:(doc.data()).key
       }])
     })
