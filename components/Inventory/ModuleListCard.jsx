@@ -3,9 +3,9 @@ import { View, Image, StyleSheet, Text } from "react-native";
 import icons from "../../app/functionList/icons";
 import { TouchableOpacity } from "react-native";
 
-export default function ModuleListCard({ module }) {
+export default function ModuleListCard({ module, onFuncPress }) {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => onFuncPress(module)}>
       <View style={styles.container}>
         <Image source={icons[module.icon]} style={styles.image} />
         <View style={styles.textContainer}>

@@ -4,10 +4,11 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../configs/FirebaseConfig";
 import ModuleListCard from "./ModuleListCard";
 import { TouchableOpacity } from "react-native";
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 
-export default function ModuleList() {
+export default function ModuleList({onFuncPress}) {
   const [moduleList, setModuleList] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     const q = query(collection(db, "Modules"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -58,7 +59,10 @@ export default function ModuleList() {
       <FlatList
         data={moduleList}
         renderItem={({ item }) => (
-          <ModuleListCard module={item} key={item.id} />
+          <ModuleListCard 
+          module={item} 
+          key={item.id}
+          onFuncPress={() => router.push('clothingList/' + item.key)}/>
         )}
         keyExtractor={(item) => item.id}
       />
