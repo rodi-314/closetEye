@@ -161,6 +161,7 @@ export default function register_clothing() {
           onChangeText={setDescription}
           maxLength={descriptionLimit}
         />
+        <Text style={styles.counterText}>{description.length}/{descriptionLimit}</Text>
         <View>
         <TextInput
         placeholder='Rfid Tag'
@@ -173,7 +174,6 @@ export default function register_clothing() {
             <Text style={styles.scanButtonText}>Scan</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.counterText}>{description.length}/{descriptionLimit}</Text>
         <TouchableOpacity style={styles.addContainer} onPress={onAddClothing}>
           <Text style={styles.addText}>Add Clothing</Text>
         </TouchableOpacity>
